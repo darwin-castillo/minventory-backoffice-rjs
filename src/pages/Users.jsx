@@ -1,12 +1,9 @@
 import { MoreVertical, Edit2, Trash2 } from 'lucide-react';
+import { useUsers } from '../hooks/useUsers';
 
-const usersData = [
-    { id: 1, name: 'Ana García', email: 'ana@ejemplo.com', role: 'Admin', status: 'Activo' },
-    { id: 2, name: 'Carlos Ruíz', email: 'carlos@ejemplo.com', role: 'Editor', status: 'Inactivo' },
-    { id: 3, name: 'Elena Mora', email: 'elena@ejemplo.com', role: 'Viewer', status: 'Activo' },
-];
 
 const Users = () => {
+    const { users, loading, error, refresh } = useUsers();
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -27,7 +24,7 @@ const Users = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {usersData.map((user) => (
+                        {users.map((user) => (
                             <tr key={user.id} className="hover:bg-gray-50 transition-colors">
                                 <td className="px-6 py-4">
                                     <div className="font-medium text-gray-900">{user.name}</div>
