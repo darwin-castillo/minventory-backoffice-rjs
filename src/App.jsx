@@ -3,6 +3,7 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Login from './pages/Login';
+import Products from './pages/Products';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 
@@ -20,7 +21,8 @@ const AppContent = () => {
           <Layout>
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/usuarios" element={<Users />} />
+              <Route path="/users" element={<Users />} />
+              <Route path="/products" element={<Products />} />
             </Routes>
           </Layout>
         ) : (

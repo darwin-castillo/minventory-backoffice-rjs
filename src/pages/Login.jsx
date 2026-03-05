@@ -2,27 +2,30 @@ import { useState } from 'react';
 import { Lock, Mail, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setIsSubmitting(true);
 
-        const success = login(email, password);
+        const result = await login(email, password);
 
-        if (success) {
-            navigate('/'); // Redirigir al dashboard
+        if (result.success) {
+            navigate('/');
         } else {
-            setError('Credenciales incorrectas. Intenta con admin@test.com / 123456');
+            setError(result.message);
+            setIsSubmitting(false); // Reactivar el botón si falla
         }
     };
 
@@ -91,9 +94,15 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98]"
+                        disabled={isSubmitting}
+                        className={`w-full flex justify-center items-center font-bold py-3 rounded-xl shadow-lg transition-all 
+          ${isSubmitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 active:scale-95 text-white'}`}
                     >
-                        Iniciar Sesión
+                        {isSubmitting ? (
+                            <Loader2 className="animate-spin" size={24} />
+                        ) : (
+                            "Iniciar Sesión"
+                        )}
                     </button>
                 </form>
 

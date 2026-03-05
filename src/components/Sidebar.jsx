@@ -1,20 +1,32 @@
-import { Home, Users, Settings, BarChart3, X, LogOut } from 'lucide-react';
+import { Home, Users, Settings, BarChart3, X, LogOut, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useState } from 'react';
+
+
 
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
     const { logout } = useAuth();
+    const [selected, setSelected] = useState("Dashboard");
+
+    const handleSelected = (label) => {
+        setSelected(label);
+        setIsOpen(false);
+    }
+
+
     return (
         <aside className={`
-      fixed inset-y-0 left-0 z-30 w-64 bg-slate-900 text-white transform transition-transform duration-300 ease-in-out
+      fixed inset-y-0 left-0 z-30 w-64 bg-slate-800 text-white/70 transform transition-transform duration-300 ease-in-out
       lg:relative lg:translate-x-0 
       ${isOpen ? 'translate-x-0' : '-translate-x-full'}
     `}>
 
-            <div className="flex items-center justify-between p-6 border-b border-slate-800">
-                <div className="text-2xl font-bold">
-                    Min<span className="text-blue-500">ventory</span>
+            <div className="flex items-center justify-between p-6  border-slate-800">
+
+                <div className="text-2xl font-bold text-white">
+                    Stok<span className="font-semibold text-amber-600">mi</span>
                 </div>
                 <button onClick={() => setIsOpen(false)} className="lg:hidden">
                     <X size={24} />
@@ -22,8 +34,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </div>
 
             <nav className="flex-1 p-4 space-y-2">
-                <SidebarLink to="/" icon={<Home size={20} />} label="Dashboard" onClick={() => setIsOpen(false)} />
-                <SidebarLink to="/usuarios" icon={<Users size={20} />} label="Usuarios" onClick={() => setIsOpen(false)} />
+                <SidebarLink isSelected={selected === "Dashboard"} to="/" icon={<Home size={20} />} label="Dashboard" onClick={() => handleSelected("Dashboard")} />
+                <SidebarSection title="Gestión" />
+                <SidebarLink isSelected={selected === "Usuarios"} to="/users" icon={<Users size={20} />} label="Usuarios" onClick={() => handleSelected("Usuarios")} />
+                <SidebarLink isSelected={selected === "Productos"} to="/products" icon={<Package size={20} />} label="Productos" onClick={() => handleSelected("Productos")} />
                 {/* ...otros links */}
             </nav>
 
@@ -39,16 +53,23 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </aside>
     );
 };
+const SidebarSection = ({ title }) => (
+    <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+        {title}
+    </div>
+);
 
 
-const SidebarLink = ({ to, icon, label, onClick }) => (
+const SidebarLink = ({ to, icon, label, onClick, isSelected }) => (
+
     <Link
         to={to}
         onClick={onClick}
-        className={`flex items-center gap-3 p-3 rounded-lg  hover:bg-slate-800} transition-colors`}
+        className={isSelected ? `flex items-center  gap-3 p-3 rounded-lg bg-slate-950  text-white} transition-colors` : `flex items-center gap-3 p-3 rounded-lg  hover:bg-slate-600 transition-colors`}
     >
         {icon}
         <span>{label}</span>
     </Link>
 );
+
 export default Sidebar;
