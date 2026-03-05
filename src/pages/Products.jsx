@@ -1,51 +1,45 @@
-import { MoreVertical, Edit2, Trash2 } from 'lucide-react';
+import { useProducts } from '../hooks/useProducts'; // Importamos nuestro nuevo Hook
+import { Package, Plus, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
+
 const Products = () => {
 
-    const productsData = [
-        { id: 1, name: 'Producto 1', price: 100, stock: 10 },
-        { id: 2, name: 'Producto 2', price: 200, stock: 20 },
-        { id: 3, name: 'Producto 3', price: 300, stock: 30 },
-    ];
+    const { products, loading, error, refresh } = useProducts();
+
+    if (loading) return (
+        <div className="h-96 flex items-center justify-center">
+            <Loader2 className="animate-spin text-blue-600" size={40} />
+        </div>
+    );
+
+    if (error) return (
+        <div className="p-8 text-center bg-red-50 rounded-2xl border border-red-100">
+            <AlertCircle className="mx-auto text-red-500 mb-2" />
+            <p className="text-red-700 font-medium">{error}</p>
+            <button onClick={refresh} className="mt-4 text-sm text-red-600 underline">Reintentar</button>
+        </div>
+    );
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-800">Gestión de Productos</h2>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
-                    + Nuevo Producto
-                </button>
+                <h2 className="text-2xl font-bold text-gray-800">Productos</h2>
+                <div className="flex gap-2">
+                    <button onClick={refresh} className="p-2 text-gray-400 hover:text-blue-600 transition-colors">
+                        <RefreshCw size={20} />
+                    </button>
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold">
+                        + Nuevo
+                    </button>
+                </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <table className="w-full text-left border-collapse">
-                    <thead className="bg-gray-50 border-b border-gray-200">
-                        <tr>
-                            <th className="px-6 py-4 text-sm font-semibold text-gray-600">Nombre</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-gray-600">Precio</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-gray-600">Stock</th>
-                            <th className="px-6 py-4 text-sm font-semibold text-gray-600 text-right">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {productsData.map((product) => (
-                            <tr key={product.id} className="hover:bg-gray-50 transition-colors">
-                                <td className="px-6 py-4">
-                                    <div className="font-medium text-gray-900">{product.name}</div>
-
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-600">{product.price}</td>
-                                <td className="px-6 py-4 text-sm">
-                                    <span className={`px-2 py-1 rounded-full text-xs font-medium`}>
-                                        {product.stock}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 text-right">
-                                    <button className="text-gray-400 hover:text-blue-600 mr-3"><Edit2 size={18} /></button>
-                                    <button className="text-gray-400 hover:text-red-600"><Trash2 size={18} /></button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {products.map(product => (
+                    <div key={product._id} className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 className="font-bold">{product.name}</h3>
+                        <p className="text-blue-600 font-black mt-2">${product.price}</p>
+                    </div>
+                ))}
             </div>
         </div>
     );
