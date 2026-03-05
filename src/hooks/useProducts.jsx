@@ -11,8 +11,9 @@ export const useProducts = () => {
             setLoading(true);
             setError(null);
             const data = await productService.getAll();
-            console.log("data", data);
-            setProducts(data.products || data);
+            const rawProducts = data.products || data;
+            const modeledProducts = rawProducts.map(item => ProductModel(item));
+            setProducts(modeledProducts);
         } catch (err) {
             setError(err.message || "Error al cargar productos");
         } finally {

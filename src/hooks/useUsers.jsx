@@ -14,7 +14,9 @@ export const useUsers = () => {
             setLoading(true);
             setError(null);
             const data = await userService.getAll();
-            setUsers(data.users || data);
+            const rawUsers = data.users || data;
+            const modeledUsers = rawUsers.map(item => UserModel(item));
+            setUsers(modeledUsers);
         } catch (err) {
             setError(err.message || "Error al cargar usuarios");
         } finally {
