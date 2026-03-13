@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { userService } from '../services/userService';
+import { UserModel } from '../models/UserModel';
 
 export const useUsers = () => {
     const [users, setUsers] = useState([]);
@@ -14,7 +16,9 @@ export const useUsers = () => {
             setLoading(true);
             setError(null);
             const data = await userService.getAll();
-            const rawUsers = data.users || data;
+            console.log("raw ", data);
+            const rawUsers = data.value || data;
+
             const modeledUsers = rawUsers.map(item => UserModel(item));
             setUsers(modeledUsers);
         } catch (err) {

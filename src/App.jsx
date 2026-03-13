@@ -4,8 +4,10 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Login from './pages/Login';
 import Products from './pages/Products';
+import AddProduct from './pages/AddProduct';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
+
 
 const AppContent = () => {
   const { user, loading } = useAuth();
@@ -23,6 +25,7 @@ const AppContent = () => {
               <Route path="/" element={<Dashboard />} />
               <Route path="/users" element={<Users />} />
               <Route path="/products" element={<Products />} />
+              <Route path="/productos/nuevo" element={<AddProduct />} />
             </Routes>
           </Layout>
         ) : (

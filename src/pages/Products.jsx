@@ -1,13 +1,14 @@
 import { useProducts } from '../hooks/useProducts'; // Importamos nuestro nuevo Hook
 import { Package, Plus, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
-import { ProductModel } from '../models/ProductModel';
-import { AddProductModal } from '../components/AddProductModal';
+
 import { useStores } from '../hooks/useStores';
+import { useNavigate } from 'react-router-dom';
 
 const Products = () => {
-
-    const { products, loading, error, refresh, isModalOpen, setIsModalOpen } = useProducts();
+    const navigate = useNavigate();
+    const { products, loading, error, refresh } = useProducts();
     const { stores, loadingStores, errorStores } = useStores();
+
     console.log(stores.length > 0 ? "La tienda es " + stores[0].name : "No hay tiendas registradas");
 
     if (loading) return (
@@ -33,7 +34,7 @@ const Products = () => {
                         <RefreshCw size={20} />
                     </button>
                     <button
-                        onClick={() => setIsModalOpen(true)} // ABRIR MODAL
+                        onClick={() => navigate('/productos/nuevo')} // ABRIR MODAL
                         className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-blue-200"
                     >
                         <Plus size={20} /> Nuevo Producto
@@ -49,20 +50,12 @@ const Products = () => {
                     </div>
                 ))}
             </div>
-            {stores.length > 0 ? (
-                <AddProductModal
-                    store={stores[0]._id}
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    onRefresh={refresh}
-                />
-            ) :
-                <p className="text-center text-gray-600">No hay tiendas registradas</p>
-            }
+
+
         </div>
 
     );
 };
-//OLED LTPO de 6.8 pulgadas 12 GB o 16 GB de RAM Bateria capacidad de 5,850 mAh
+
 
 export default Products;
