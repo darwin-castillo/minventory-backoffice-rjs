@@ -1,15 +1,20 @@
-import { MoreVertical, Edit2, Trash2 } from 'lucide-react';
+import { MoreVertical, Edit2, Trash2, UserPlus } from 'lucide-react';
 import { useUsers } from '../hooks/useUsers';
+import { useNavigate } from 'react-router-dom';
 
 
 const Users = () => {
+    const navigate = useNavigate();
     const { users, loading, error, refresh } = useUsers();
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gray-800">Gestión de Usuarios</h2>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
-                    + Nuevo Usuario
+                <button 
+                    onClick={() => navigate('/users/nuevo')}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2"
+                >
+                    <UserPlus size={16} /> Nuevo Usuario
                 </button>
             </div>
 

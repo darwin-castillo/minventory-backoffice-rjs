@@ -1,3 +1,10 @@
+export const initialUserState = {
+    name: '',
+    email: '',
+    password: '',
+    role: 'viewer',
+};
+
 export const UserModel = (data = {}) => ({
     id: data._id || data.id || '',
     name: data.name || '',

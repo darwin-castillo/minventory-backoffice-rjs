@@ -5,6 +5,7 @@ import Users from './pages/Users';
 import Login from './pages/Login';
 import Products from './pages/Products';
 import AddProduct from './pages/AddProduct';
+import AddUser from './pages/AddUser';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 
@@ -24,6 +25,7 @@ const AppContent = () => {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/users" element={<Users />} />
+              <Route path="/users/nuevo" element={<AddUser />} />
               <Route path="/products" element={<Products />} />
               <Route path="/productos/nuevo" element={<AddProduct />} />
             </Routes>
