@@ -2,6 +2,7 @@ import { Home, Users, Settings, BarChart3, X, LogOut, Package } from 'lucide-rea
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
+import { useGlobal } from '../hooks/useGlobal';
 
 
 
@@ -9,6 +10,7 @@ import { useState } from 'react';
 const Sidebar = ({ isOpen, setIsOpen }) => {
     const { logout } = useAuth();
     const [selected, setSelected] = useState("Dashboard");
+    const { selectedRoute } = useGlobal();
 
     const handleSelected = (label) => {
         setSelected(label);
@@ -37,7 +39,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 <SidebarLink isSelected={selected === "Dashboard"} to="/" icon={<Home size={20} />} label="Dashboard" onClick={() => handleSelected("Dashboard")} />
                 <SidebarSection title="Gestión" />
                 <SidebarLink isSelected={selected === "Usuarios"} to="/users" icon={<Users size={20} />} label="Usuarios" onClick={() => handleSelected("Usuarios")} />
-                <SidebarLink isSelected={selected === "Productos"} to="/products" icon={<Package size={20} />} label="Productos" onClick={() => handleSelected("Productos")} />
+                <SidebarLink isSelected={selected === "Productos" || selectedRoute === "products"} to="/products" icon={<Package size={20} />} label="Productos" onClick={() => handleSelected("Productos")} />
                 {/* ...otros links */}
             </nav>
 

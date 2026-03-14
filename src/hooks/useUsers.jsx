@@ -12,6 +12,7 @@ export const useUsers = () => {
     }, []);
 
     const fetchUsers = async () => {
+
         try {
             setLoading(true);
             setError(null);
