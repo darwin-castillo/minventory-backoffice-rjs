@@ -12,6 +12,20 @@ export const userService = {
         return handleResponse(response);
     },
 
+    getById: async (id) => {
+        const response = await fetch(`${BASE_URL}/users/${id}`, { headers: getHeaders() });
+        return handleResponse(response);
+    },
+
+    update: async (id, userData) => {
+        const response = await fetch(`${BASE_URL}/users/${id}`, {
+            method: 'PUT',
+            headers: getHeaders(),
+            body: JSON.stringify(userData),
+        });
+        return handleResponse(response);
+    },
+
     getAll: async () => {
         const response = await fetch(`${BASE_URL}/users`, { headers: getHeaders() });
         return handleResponse(response);

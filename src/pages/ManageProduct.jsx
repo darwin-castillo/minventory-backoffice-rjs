@@ -1,14 +1,40 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { productService } from '../services/productService';
 import { initialProductState } from '../models/ProductModel';
 import { ChevronLeft, Save, Loader2, Package } from 'lucide-react';
 
-const AddProduct = () => {
+const ManageProduct = () => {
+    const { id } = useParams();
+    const isEditMode = !!id;
     const [formData, setFormData] = useState(initialProductState);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(isEditMode);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (id) {
+            fetchProduct();
+        }
+    }, [id]);
+
+    const fetchProduct = async () => {
+        try {
+            const response = await productService.getById(id);
+            const product = response.value || response;
+            setFormData({
+                name: product.name || '',
+                price: product.price || 0,
+                stock: product.stock || 0,
+                description: product.description || ''
+            });
+        } catch (err) {
+            setError("Error al cargar el producto. Por favor intenta de nuevo.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,9 +47,13 @@ const AddProduct = () => {
         setError(null);
 
         try {
-            await productService.create(formData);
+            if (isEditMode) {
+                await productService.update(id, formData);
+            } else {
+                await productService.create(formData);
+            }
             // Navegamos de vuelta a la lista de productos tras el éxito
-            navigate('/productos');
+            navigate('/products');
         } catch (err) {
             setError("Error al conectar con la API. Revisa los datos.");
         } finally {
@@ -31,11 +61,19 @@ const AddProduct = () => {
         }
     };
 
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <Loader2 className="animate-spin text-blue-600" size={40} />
+            </div>
+        );
+    }
+
     return (
         <div className="max-w-3xl mx-auto space-y-6">
             {/* Cabecera / Breadcrumbs */}
             <button
-                onClick={() => navigate(-1)}
+                onClick={() => navigate('/products')}
                 className="flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors"
             >
                 <ChevronLeft size={20} /> Volver al inventario
@@ -46,8 +84,8 @@ const AddProduct = () => {
                     <Package size={28} />
                 </div>
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Crear Nuevo Producto</h1>
-                    <p className="text-gray-500">Completa la información para registrar el artículo en el sistema.</p>
+                    <h1 className="text-3xl font-bold text-gray-900">{isEditMode ? 'Editar Producto' : 'Crear Nuevo Producto'}</h1>
+                    <p className="text-gray-500">{isEditMode ? 'Actualiza la información del producto.' : 'Completa la información para registrar el artículo en el sistema.'}</p>
                 </div>
             </div>
 
@@ -120,7 +158,7 @@ const AddProduct = () => {
                 <div className="bg-gray-50 p-8 flex justify-end gap-4 border-t border-gray-100">
                     <button
                         type="button"
-                        onClick={() => navigate('/productos')}
+                        onClick={() => navigate('/products')}
                         className="px-6 py-3 font-bold text-gray-500 hover:bg-gray-200 rounded-xl transition-all"
                     >
                         Descartar
@@ -133,7 +171,7 @@ const AddProduct = () => {
                         {isSubmitting ? (
                             <Loader2 className="animate-spin" size={20} />
                         ) : (
-                            <><Save size={20} /> Registrar Producto</>
+                            <><Save size={20} /> {isEditMode ? 'Actualizar Producto' : 'Registrar Producto'}</>
                         )}
                     </button>
                 </div>
@@ -141,5 +179,4 @@ const AddProduct = () => {
         </div>
     );
 };
-
-export default AddProduct;
+export default ManageProduct;

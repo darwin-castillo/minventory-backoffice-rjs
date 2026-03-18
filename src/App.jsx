@@ -4,8 +4,8 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Login from './pages/Login';
 import Products from './pages/Products';
-import AddProduct from './pages/AddProduct';
-import AddUser from './pages/AddUser';
+import ManageProduct from './pages/ManageProduct';
+import ManageUser from './pages/ManageUser';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 
@@ -25,9 +25,11 @@ const AppContent = () => {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/users" element={<Users />} />
-              <Route path="/users/nuevo" element={<AddUser />} />
+              <Route path="/users/manage" element={<ManageUser />} />
+              <Route path="/users/manage/:id" element={<ManageUser />} />
               <Route path="/products" element={<Products />} />
-              <Route path="/productos/nuevo" element={<AddProduct />} />
+              <Route path="/products/manage" element={<ManageProduct />} />
+              <Route path="/products/manage/:id" element={<ManageProduct />} />
             </Routes>
           </Layout>
         ) : (
